@@ -5,6 +5,10 @@ st.set_page_config(page_title="GPT-4o-mini 챗봇", page_icon="🤖")
 st.title("🤖 GPT-4o-mini 챗봇")
 
 # Streamlit Community Cloud secrets에서 API 키 로드
+if "OPENAI_API_KEY" not in st.secrets:
+    st.error("Secrets에 OPENAI_API_KEY가 설정되지 않았습니다. 앱 Settings → Secrets에서 추가해주세요.")
+    st.stop()
+
 client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
 # 사이드바
