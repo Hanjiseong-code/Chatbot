@@ -4,37 +4,30 @@ from openai import OpenAI
 st.set_page_config(page_title="GPT-4o-mini 챗봇", page_icon="🤖")
 st.title("🤖 GPT-4o-mini 챗봇")
 
-# Streamlit Community Cloud secrets에서 API 키 로드
 if "OPENAI_API_KEY" not in st.secrets:
     st.error("Secrets에 OPENAI_API_KEY가 설정되지 않았습니다. 앱 Settings → Secrets에서 추가해주세요.")
     st.stop()
 
 client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
-# 사이드바
 with st.sidebar:
     st.header("설정")
     if st.button("대화 초기화"):
         st.session_state.messages = []
         st.rerun()
 
-# 대화 기록 초기화
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-# 이전 대화 표시
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
 
-# 사용자 입력
 if prompt := st.chat_input("메시지를 입력하세요..."):
-    # 사용자 메시지 추가 및 표시
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.markdown(prompt)
 
-    # AI 응답 생성 (스트리밍)
     with st.chat_message("assistant"):
         response_placeholder = st.empty()
         full_response = ""
